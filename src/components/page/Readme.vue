@@ -49,7 +49,8 @@
 </template>
 
 <script>
-import {httpGet} from "../../commonJS/common.js";
+import {getTabelData} from "../../api/tabel.js";
+import {mapState} from "vuex";
     export default {
         created(){
             this.init();
@@ -61,15 +62,12 @@ import {httpGet} from "../../commonJS/common.js";
         },
         methods:{
             init(){
-                let url ="/v1/auth/assignment";
-                let data ={"access-token":"67f82cc36805d1e9640861f06960c828ec61e3a8",
-                "role_id":"",
-                sing:""
-            };
-                httpGet(url,data,res=>{
+                console.log(this.token)
+                getTabelData(this.token).then( res=>{
+                    console.log(res);
                     this.tableData = res.data.items;
-                    console.log(this.tableData);
-                })
+                    
+                });
             },
            handleDelete(index,data){
                 console.log(index);
@@ -81,7 +79,13 @@ import {httpGet} from "../../commonJS/common.js";
                 console.log(data);
                 this.$message("编辑第"+(index+1)+"行"); 
            }
-        }
+        },
+        computed: {
+            ...mapState([
+              'token'
+        ])
+      },
+
     }
 </script>
 
